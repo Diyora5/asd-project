@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "metrics": {
+    "asd_ratio": {
+      "actual": 0.12003333333333334,
+      "expected": 0.12003333333333334,
+      "relative_diff": 0.0,
+      "passed": true
+    },
+    "missing_data": {
+      "ratio": 0.02716028368794326,
+      "passed": true
+    }
+  }
+}

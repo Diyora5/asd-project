@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AutiScreen - Early Autism Screening App</title>
+<style>
+  /* Reset and base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7f6;
+    color: #333;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3, h4 {
+    margin: 0 0 0.5em 0;
+    font-weight: 700;
+    color: #2a3a3a;
+  }
+  p {
+    margin: 0 0 1em 0;
+    line-height: 1.5;
+    color: #4a5a5a;
+  }
+  a {
+    text-decoration: none;
+    color: #3caea3;
+  }
+  a:hover {
+    color: #2a7f7a;
+  }
+  /* Container */
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 3rem 1rem;
+  }
+  /* Morphism styles */
+  .morph-card {
+    background: rgba(255 255 255 / 0.7);
+    border-radius: 20px;
+    box-shadow:
+      8px 8px 15px rgba(163, 177, 198, 0.3),
+      -8px -8px 15px rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  header h1 {
+    font-size: 2.2rem;
+    color: #3caea3;
+    text-shadow:
+      1px 1px 2px rgba(60, 174, 163, 0.5);
+  }
+  header p {
+    font-size: 1.1rem;
+    color: #6b7a7a;
+  }
+  /* Buttons */
+  .btn {
+    display: inline-block;
+    background: #a7d7c5;
+    color: #2a3a3a;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 30px;
+    box-shadow:
+      4px 4px 8px rgba(163, 177, 198, 0.4),
+      -4px -4px 8px rgba(255, 255, 255, 0.7);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    user-select: none;
+    text-align: center;
+  }
+  .btn:hover {
+    background: #7fc1b3;
+  }
+  /* Section titles */
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #2a3a3a;
+    border-bottom: 2px solid #a7d7c5;
+    padding-bottom: 0.3rem;
+  }
+  /* Responsive images */
+  img {
+    max-width: 100%;
+    border-radius: 15px;
+    box-shadow:
+      6px 6px 12px rgba(163, 177, 198, 0.25),
+      -6px -6px 12px rgba(255, 255, 255, 0.6);
+    margin-bottom: 1rem;
+  }
+  /* Text highlight */
+  .highlight {
+    color: #3caea3;
+    font-weight: 700;
+  }
+  /* Result prediction */
+  .result-box {
+    background: rgba(60, 174, 163, 0.15);
+    border-radius: 15px;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2a3a3a;
+    box-shadow:
+      inset 4px 4px 8px rgba(255 255 255 / 0.7),
+      inset -4px -4px 8px rgba(163, 177, 198, 0.3);
+    margin-top: 1rem;
+  }
+  /* Form styles */
+  form {
+    margin-top: 1rem;
+  }
+  .question {
+    margin-bottom: 1.25rem;
+  }
+  .question p {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .options {
+    display: flex;
+    gap: 1rem;
+  }
+  label {
+    flex: 1;
+    background: rgba(255 255 255 / 0.6);
+    border-radius: 15px;
+    box-shadow:
+      4px 4px 8px rgba(163, 177, 198, 0.3),
+      -4px -4px 8px rgba(255, 255, 255, 0.7);
+    padding: 0.5rem 0;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
+  input[type="radio"] {
+    display: none;
+  }
+  input[type="radio"]:checked + label {
+    background: #7fc1b3;
+    color: #1f2f2d;
+    box-shadow:
+      inset 4px 4px 8px rgba(163, 177, 198, 0.5),
+      inset -4px -4px 8px rgba(255, 255, 255, 0.9);
+  }
+  /* Footer */
+  footer {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #7a8a8a;
+    margin-top: 3rem;
+    padding-bottom: 1rem;
+  }
+  /* Mobile friendly */
+  @media (max-width: 500px) {
+    .container {
+      padding: 1rem 0.75rem 2rem 0.75rem;
+    }
+    header h1 {
+      font-size: 1.8rem;
+    }
+    .section-title {
+      font-size: 1.3rem;
+    }
+    .options {
+      flex-direction: column;
+    }
+    label {
+      padding: 0.75rem 0;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>AutiScreen</h1>
+      <p>Your trusted early autism screening platform for toddlers</p>
+    </header>
+
+    <section class="morph-card" id="welcome">
+      <h2 class="section-title">Welcome</h2>
+      <p>Welcome to <span class="highlight">AutiScreen</span>, a mobile test platform designed for parents, healthcare professionals, and relatives of toddlers aged 10 to 36 months. Our app uses 40 screening yes/no questions to help predict signs of autism early, enabling timely intervention and support.</p>
+      <img src="static/images/boy_04.png" alt="Toddler eyes" />
+    </section>
+
+    <section class="morph-card" id="about-asd">
+      <h2 class="section-title">About Autism Spectrum Disorder (ASD)</h2>
+      <p>Autism Spectrum Disorder (ASD) is a developmental condition characterized by challenges with social interaction, communication, and repetitive behaviors. Early detection is crucial to provide the best support and improve long-term outcomes for children.</p>
+      <img src="static/images/boy_01.png" alt="Child playing" />
+    </section>
+
+    <section class="morph-card" id="aim-test">
+      <h2 class="section-title">The Aim of Taking the Test</h2>
+      <p>With earlier diagnosis, you can start interventions when the brain is still developing, and possibly take a child who would otherwise live as a completely dependent person who cannot live alone, and help that child become an independent person.</p>
+      <img src="static/images/3d_image3.png" alt="A toddler's curious gaze" />
+    </section>
+
+    <section class="morph-card" id="the-test">
+      <h2 class="section-title">The Test</h2>
+      <form id="asd-test-form">
+        <!-- Part 1: Social Interaction & Communication -->
+        <h3>Part 1: Social Interaction & Communication</h3>
+        <div class="question">
+          <p>1. Does your child respond to their name when called?</p>
+          <div class="options">
+            <input type="radio" id="q1-yes" name="q1" value="0" required />
+            <label for="q1-yes">Yes</label>
+            <input type="radio" id="q1-no" name="q1" value="1" />
+            <label for="q1-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>2. Does your child make eye contact when talking or playing with others?</p>
+          <div class="options">
+            <input type="radio" id="q2-yes" name="q2" value="0" required />
+            <label for="q2-yes">Yes</label>
+            <input type="radio" id="q2-no" name="q2" value="1" />
+            <label for="q2-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>3. Does your child smile back when you smile at them?</p>
+          <div class="options">
+            <input type="radio" id="q3-yes" name="q3" value="0" required />
+            <label for="q3-yes">Yes</label>
+            <input type="radio" id="q3-no" name="q3" value="1" />
+            <label for="q3-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>4. Does your child look at objects when you point to them? (Joint attention)</p>
+          <div class="options">
+            <input type="radio" id="q4-yes" name="q4" value="0" required />
+            <label for="q4-yes">Yes</label>
+            <input type="radio" id="q4-no" name="q4" value="1" />
+            <label for="q4-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>5. Does your child use gestures (e.g., waving, pointing, reaching) to communicate?</p>
+          <div class="options">
+            <input type="radio" id="q5-yes" name="q5" value="0" required />
+            <label for="q5-yes">Yes</label>
+            <input type="radio" id="q5-no" name="q5" value="1" />
+            <label for="q5-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>6. Does your child show interest in playing with other children?</p>
+          <div class="options">
+            <input type="radio" id="q6-yes" name="q6" value="0" required />
+            <label for="q6-yes">Yes</label>
+            <input type="radio" id="q6-no" name="q6" value="1" />
+            <label for="q6-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>7. Does your child bring objects to show you just for sharing (not for help)?</p>
+          <div class="options">
+            <input type="radio" id="q7-yes" name="q7" value="0" required />
+            <label for="q7-yes">Yes</label>
+            <input type="radio" id="q7-no" name="q7" value="1" />
+            <label for="q7-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>8. Does your child imitate your actions (e.g., clapping, waving, making faces)?</p>
+          <div class="options">
+            <input type="radio" id="q8-yes" name="q8" value="0" required />
+            <label for="q8-yes">Yes</label>
+            <input type="radio" id="q8-no" name="q8" value="1" />
+            <label for="q8-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>9. If you point at something across the room, does your child look at it?</p>
+          <div class="options">
+            <input type="radio" id="q9-yes" name="q9" value="0" required />
+            <label for="q9-yes">Yes</label>
+            <input type="radio" id="q9-no" name="q9" value="1" />
+            <label for="q9-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>10. Does your child try to get your attention by making sounds or gestures?</p>
+          <div class="options">
+            <input type="radio" id="q10-yes" name="q10" value="0" required />
+            <label for="q10-yes">Yes</label>
+            <input type="radio" id="q10-no" name="q10" value="1" />
+            <label for="q10-no">No</label>
+          </div>
+        </div>
+
+        <!-- Part 2: Speech, Language & Cognitive Skills -->
+        <h3>Part 2: Speech, Language &amp; Cognitive Skills</h3>
+        <div class="question">
+          <p>11. Does your child use single words (e.g., "mama," "ball") by 12–16 months?</p>
+          <div class="options">
+            <input type="radio" id="q11-yes" name="q11" value="0" required />
+            <label for="q11-yes">Yes</label>
+            <input type="radio" id="q11-no" name="q11" value="1" />
+            <label for="q11-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>12. By 24 months, does your child combine two words (e.g., “want cookie”)?</p>
+          <div class="options">
+            <input type="radio" id="q12-yes" name="q12" value="0" required />
+            <label for="q12-yes">Yes</label>
+            <input type="radio" id="q12-no" name="q12" value="1" />
+            <label for="q12-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>13. Does your child babble or make different sounds to express emotions?</p>
+          <div class="options">
+            <input type="radio" id="q13-yes" name="q13" value="0" required />
+            <label for="q13-yes">Yes</label>
+            <input type="radio" id="q13-no" name="q13" value="1" />
+            <label for="q13-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>14. Does your child understand simple instructions (e.g., “Give me the toy”)?</p>
+          <div class="options">
+            <input type="radio" id="q14-yes" name="q14" value="0" required />
+            <label for="q14-yes">Yes</label>
+            <input type="radio" id="q14-no" name="q14" value="1" />
+            <label for="q14-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>15. Does your child follow eye gaze (e.g., looking where you look)?</p>
+          <div class="options">
+            <input type="radio" id="q15-yes" name="q15" value="0" required />
+            <label for="q15-yes">Yes</label>
+            <input type="radio" id="q15-no" name="q15" value="1" />
+            <label for="q15-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>16. Does your child struggle to play pretend games (e.g., feeding a doll)?</p>
+          <div class="options">
+            <input type="radio" id="q16-yes" name="q16" value="1" required />
+            <label for="q16-yes">Yes</label>
+            <input type="radio" id="q16-no" name="q16" value="0" />
+            <label for="q16-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>17. Does your child repeat words or phrases (echolalia) instead of using them meaningfully?</p>
+          <div class="options">
+            <input type="radio" id="q17-yes" name="q17" value="1" required />
+            <label for="q17-yes">Yes</label>
+            <input type="radio" id="q17-no" name="q17" value="0" />
+            <label for="q17-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>18. Has your child ever lost language or social skills they previously had?</p>
+          <div class="options">
+            <input type="radio" id="q18-yes" name="q18" value="1" required />
+            <label for="q18-yes">Yes</label>
+            <input type="radio" id="q18-no" name="q18" value="0" />
+            <label for="q18-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>19. Does your child seem uninterested in imitating speech or sounds?</p>
+          <div class="options">
+            <input type="radio" id="q19-yes" name="q19" value="1" required />
+            <label for="q19-yes">Yes</label>
+            <input type="radio" id="q19-no" name="q19" value="0" />
+            <label for="q19-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>20. Does your child use their voice in unusual ways (e.g., monotone, robotic, singsong)?</p>
+          <div class="options">
+            <input type="radio" id="q20-yes" name="q20" value="1" required />
+            <label for="q20-yes">Yes</label>
+            <input type="radio" id="q20-no" name="q20" value="0" />
+            <label for="q20-no">No</label>
+          </div>
+        </div>
+
+        <!-- Part 3: Repetitive Behaviors & Restricted Interests -->
+        <h3>Part 3: Repetitive Behaviors &amp; Restricted Interests</h3>
+        <div class="question">
+          <p>21. Does your child flap their hands, rock back and forth, or spin repetitively?</p>
+          <div class="options">
+            <input type="radio" id="q21-yes" name="q21" value="1" required />
+            <label for="q21-yes">Yes</label>
+            <input type="radio" id="q21-no" name="q21" value="0" />
+            <label for="q21-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>22. Does your child insist on doing things the same way every time (e.g., same routine, same path)?</p>
+          <div class="options">
+            <input type="radio" id="q22-yes" name="q22" value="1" required />
+            <label for="q22-yes">Yes</label>
+            <input type="radio" id="q22-no" name="q22" value="0" />
+            <label for="q22-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>23. Does your child show an intense attachment to specific objects (e.g., a toy, bottle, or part of an object like a wheel)?</p>
+          <div class="options">
+            <input type="radio" id="q23-yes" name="q23" value="1" required />
+            <label for="q23-yes">Yes</label>
+            <input type="radio" id="q23-no" name="q23" value="0" />
+            <label for="q23-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>24. Does your child play with toys in an unusual way (e.g., lining up, spinning wheels, fixating on parts)?</p>
+          <div class="options">
+            <input type="radio" id="q24-yes" name="q24" value="1" required />
+            <label for="q24-yes">Yes</label>
+            <input type="radio" id="q24-no" name="q24" value="0" />
+            <label for="q24-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>25. Does your child react strongly to small changes in routine or environment?</p>
+          <div class="options">
+            <input type="radio" id="q25-yes" name="q25" value="1" required />
+            <label for="q25-yes">Yes</label>
+            <input type="radio" id="q25-no" name="q25" value="0" />
+            <label for="q25-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>26. Does your child repeat the same action over and over without a clear purpose?</p>
+          <div class="options">
+            <input type="radio" id="q26-yes" name="q26" value="1" required />
+            <label for="q26-yes">Yes</label>
+            <input type="radio" id="q26-no" name="q26" value="0" />
+            <label for="q26-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>27. Does your child seem overly interested in numbers, letters, or patterns?</p>
+          <div class="options">
+            <input type="radio" id="q27-yes" name="q27" value="1" required />
+            <label for="q27-yes">Yes</label>
+            <input type="radio" id="q27-no" name="q27" value="0" />
+            <label for="q27-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>28. Does your child show unusual fascination with certain sounds, movements, or lights?</p>
+          <div class="options">
+            <input type="radio" id="q28-yes" name="q28" value="1" required />
+            <label for="q28-yes">Yes</label>
+            <input type="radio" id="q28-no" name="q28" value="0" />
+            <label for="q28-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>29. Does your child stare at moving objects (e.g., fans, spinning wheels) for a long time?</p>
+          <div class="options">
+            <input type="radio" id="q29-yes" name="q29" value="1" required />
+            <label for="q29-yes">Yes</label>
+            <input type="radio" id="q29-no" name="q29" value="0" />
+            <label for="q29-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>30. Does your child engage in self-soothing behaviors (e.g., head-banging, biting, or repetitive touching)?</p>
+          <div class="options">
+            <input type="radio" id="q30-yes" name="q30" value="1" required />
+            <label for="q30-yes">Yes</label>
+            <input type="radio" id="q30-no" name="q30" value="0" />
+            <label for="q30-no">No</label>
+          </div>
+        </div>
+
+        <!-- Part 4: Sensory Sensitivities & Motor Skills -->
+        <h3>Part 4: Sensory Sensitivities &amp; Motor Skills</h3>
+        <div class="question">
+          <p>31. Does your child overreact to certain sounds (e.g., vacuum, sirens, loud music)?</p>
+          <div class="options">
+            <input type="radio" id="q31-yes" name="q31" value="1" required />
+            <label for="q31-yes">Yes</label>
+            <input type="radio" id="q31-no" name="q31" value="0" />
+            <label for="q31-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>32. Does your child dislike certain textures (e.g., clothes, food, surfaces)?</p>
+          <div class="options">
+            <input type="radio" id="q32-yes" name="q32" value="1" required />
+            <label for="q32-yes">Yes</label>
+            <input type="radio" id="q32-no" name="q32" value="0" />
+            <label for="q32-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>33. Does your child show little or no reaction to pain or extreme temperatures?</p>
+          <div class="options">
+            <input type="radio" id="q33-yes" name="q33" value="1" required />
+            <label for="q33-yes">Yes</label>
+            <input type="radio" id="q33-no" name="q33" value="0" />
+            <label for="q33-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>34. Does your child seem fascinated with certain sensory experiences (e.g., feeling soft fabrics, rubbing surfaces)?</p>
+          <div class="options">
+            <input type="radio" id="q34-yes" name="q34" value="1" required />
+            <label for="q34-yes">Yes</label>
+            <input type="radio" id="q34-no" name="q34" value="0" />
+            <label for="q34-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>35. Does your child show difficulty with fine motor skills (e.g., holding a spoon, grasping small objects)?</p>
+          <div class="options">
+            <input type="radio" id="q35-yes" name="q35" value="1" required />
+            <label for="q35-yes">Yes</label>
+            <input type="radio" id="q35-no" name="q35" value="0" />
+            <label for="q35-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>36. Does your child walk on their toes often?</p>
+          <div class="options">
+            <input type="radio" id="q36-yes" name="q36" value="1" required />
+            <label for="q36-yes">Yes</label>
+            <input type="radio" id="q36-no" name="q36" value="0" />
+            <label for="q36-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>37. Did your child experience delays in crawling, walking, or sitting up?</p>
+          <div class="options">
+            <input type="radio" id="q37-yes" name="q37" value="1" required />
+            <label for="q37-yes">Yes</label>
+            <input type="radio" id="q37-no" name="q37" value="0" />
+            <label for="q37-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>38. Does your child have unusual body posture or clumsiness?</p>
+          <div class="options">
+            <input type="radio" id="q38-yes" name="q38" value="1" required />
+            <label for="q38-yes">Yes</label>
+            <input type="radio" id="q38-no" name="q38" value="0" />
+            <label for="q38-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>39. Does your child struggle with hand-eye coordination (e.g., stacking blocks, picking up small objects)?</p>
+          <div class="options">
+            <input type="radio" id="q39-yes" name="q39" value="1" required />
+            <label for="q39-yes">Yes</label>
+            <input type="radio" id="q39-no" name="q39" value="0" />
+            <label for="q39-no">No</label>
+          </div>
+        </div>
+        <div class="question">
+          <p>40. Does your child seem unaware of personal space, getting too close or avoiding touch?</p>
+          <div class="options">
+            <input type="radio" id="q40-yes" name="q40" value="1" required />
+            <label for="q40-yes">Yes</label>
+            <input type="radio" id="q40-no" name="q40" value="0" />
+            <label for="q40-no">No</label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn">Get Prediction</button>
+      </form>
+      <div id="result" class="result-box" style="display:none;"></div>
+    </section>
+
+    <section class="morph-card" id="features">
+      <h2 class="section-title">Features & Benefits</h2>
+      <ul>
+        <li>Easy-to-use mobile screening platform</li>
+        <li>Designed for parents, healthcare professionals, and relatives</li>
+        <li>Based on scientifically validated screening questions</li>
+        <li>Provides early warning signs to enable timely intervention</li>
+        <li>Elegant, modern, and user-friendly design with morphism style</li>
+      </ul>
+    </section>
+
+    <footer>
+      &copy; 2024 AutiScreen. All rights reserved.
+    </footer>
+  </div>
+
+<script>
+  document.getElementById('asd-test-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const form = event.target;
+    let score = 0;
+    const totalQuestions = 40;
+    for (let i = 1; i <= totalQuestions; i++) {
+      const answer = form['q' + i].value;
+      score += parseInt(answer, 10);
+    }
+    // Calculate prediction percentage (simple ratio)
+    const predictionPercent = Math.round((score / totalQuestions) * 100);
+    const resultDiv = document.getElementById('result');
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `Prediction: <span class="highlight">${predictionPercent}%</span> likelihood of autism signs`;
+  });
+</script>
+</body>
+</html>

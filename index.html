@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASD Screening App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #E0F7FA;
+            --accent-color: #B2EBF2;
+            --text-color: #37474F;
+            --background-color: #F5F5F5;
+            --card-background: rgba(255, 255, 255, 0.8);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .card {
+            background: var(--card-background);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 
+                8px 8px 16px var(--shadow-color),
+                -8px -8px 16px rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn {
+            background: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 
+                4px 4px 8px var(--shadow-color),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                6px 6px 12px var(--shadow-color),
+                -6px -6px 12px rgba(255, 255, 255, 0.8);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .nav {
+            background: var(--card-background);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 
+                0 4px 8px var(--shadow-color),
+                0 -4px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        /* Survey specific styles */
+        .progress-container {
+            margin: 2rem 0;
+            background: var(--card-background);
+            border-radius: 15px;
+            padding: 1rem;
+            box-shadow: 
+                4px 4px 8px var(--shadow-color),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .progress {
+            height: 10px;
+            background: var(--background-color);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: var(--card-background);
+            border-radius: 20px;
+            box-shadow: 
+                8px 8px 16px var(--shadow-color),
+                -8px -8px 16px rgba(255, 255, 255, 0.8);
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .option-btn {
+            background: var(--card-background);
+            border: none;
+            padding: 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                4px 4px 8px var(--shadow-color),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .option-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .option-btn.selected {
+            background: var(--accent-color);
+            color: var(--text-color);
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        /* Result specific styles */
+        .result-container {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .interpretation {
+            margin-top: 2rem;
+        }
+
+        .disclaimer {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: var(--card-background);
+            border-radius: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Hide all pages initially */
+        .page {
+            display: none;
+        }
+
+        /* Show active page */
+        .page.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="logo">ASD Screening</div>
+        <div class="nav-links">
+            <a href="#" onclick="showPage('home')">Home</a>
+            <a href="#" onclick="showPage('about')">About</a>
+            <a href="#" onclick="showPage('survey')">Take Test</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="card">
+                <h1>Welcome to ASD Screening</h1>
+                <p>A professional screening tool for early detection of Autism Spectrum Disorder in children aged 10-36 months.</p>
+                <div style="margin: 2rem 0;">
+                    <img src="/static/images/welcome-image.jpg" alt="Child Development" style="width: 100%; max-width: 600px; border-radius: 15px; margin: 0 auto; display: block;">
+                </div>
+                <div style="text-align: center;">
+                    <a href="#" onclick="showPage('survey')" class="btn">Start Screening</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>About the Screening</h2>
+                <p>Our screening tool is designed to help parents, healthcare professionals, and caregivers identify early signs of Autism Spectrum Disorder in young children. The screening consists of 40 carefully crafted questions that assess various developmental aspects.</p>
+                <p>This tool is not a diagnostic tool but can help identify if further professional evaluation might be beneficial.</p>
+            </div>
+
+            <div class="card">
+                <h2>Who Can Use This Tool?</h2>
+                <ul style="list-style: none; margin-left: 1rem;">
+                    <li>✓ Parents of children aged 10-36 months</li>
+                    <li>✓ Healthcare professionals</li>
+                    <li>✓ Early childhood educators</li>
+                    <li>✓ Family members and caregivers</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- About Page -->
+        <div id="about" class="page">
+            <div class="card">
+                <h1>About ASD Screening</h1>
+                <p>Our mission is to provide an accessible, professional screening tool for early detection of Autism Spectrum Disorder in young children.</p>
+            </div>
+
+            <div class="card">
+                <h2>What is Autism Spectrum Disorder?</h2>
+                <p>Autism Spectrum Disorder (ASD) is a developmental condition that affects communication, social interaction, and behavior. Early detection and intervention can significantly improve outcomes for children with ASD.</p>
+            </div>
+
+            <div class="card">
+                <h2>Our Screening Tool</h2>
+                <p>The screening tool consists of 40 carefully designed questions that assess various aspects of a child's development, including:</p>
+                <ul style="list-style: none; margin-left: 1rem;">
+                    <li>✓ Social communication skills</li>
+                    <li>✓ Behavioral patterns</li>
+                    <li>✓ Sensory responses</li>
+                    <li>✓ Play and interaction</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Important Notes</h2>
+                <p>This screening tool is not a diagnostic tool. It is designed to help identify if further professional evaluation might be beneficial. Always consult with healthcare professionals for a formal diagnosis.</p>
+                <p>The screening is most effective for children between 10 and 36 months of age.</p>
+            </div>
+
+            <div class="card">
+                <h2>Privacy and Security</h2>
+                <p>We take your privacy seriously. All responses are kept confidential and are used solely for screening purposes. We do not store any personally identifiable information.</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="#" onclick="showPage('survey')" class="btn">Start Screening</a>
+            </div>
+        </div>
+
+        <!-- Survey Page -->
+        <div id="survey" class="page">
+            <div class="card">
+                <h1>ASD Screening Survey</h1>
+                <p>Please answer the following questions about your child's behavior and development.</p>
+                <p>Choose the response that best describes your child's behavior over the past month.</p>
+            </div>
+
+            <div class="card">
+                <div class="progress-container">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <form id="surveyForm">
+                    <div id="questions-container"></div>
+
+                    <div class="navigation-buttons" style="display: none;">
+                        <button type="button" class="btn" id="prevBtn">Previous</button>
+                        <button type="button" class="btn" id="nextBtn">Next</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Result Page -->
+        <div id="result" class="page">
+            <div class="card">
+                <h1>Screening Results</h1>
+                <div class="result-container">
+                    <div class="result-icon" id="result-icon"></div>
+                    <h2 id="result-title">Screening Result: <span id="result-value"></span></h2>
+                    <p id="confidence-level">Confidence Level: <span id="confidence-value"></span>%</p>
+                </div>
+
+                <div class="interpretation" id="interpretation"></div>
+
+                <div class="disclaimer">
+                    <h3>Important Disclaimer</h3>
+                    <p>This screening tool is not a diagnostic tool. It is designed to help identify if further professional evaluation might be beneficial. Always consult with healthcare professionals for a formal diagnosis.</p>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="#" onclick="showPage('survey')" class="btn">Take Another Screening</a>
+                    <a href="#" onclick="showPage('home')" class="btn" style="margin-left: 1rem;">Return to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Questions data
+        const questions = [
+            "Does your child look at you when you call their name?",
+            "Does your child point to show you something interesting?",
+            "Does your child bring objects to show you?",
+            "Does your child respond to their name when called?",
+            "Does your child make eye contact with you?",
+            // Add more questions here...
+        ];
+
+        // Page navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Survey functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('surveyForm');
+            const questionsContainer = document.getElementById('questions-container');
+            const progressBar = document.querySelector('.progress-bar');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const navigationButtons = document.querySelector('.navigation-buttons');
+            
+            let currentQuestion = 0;
+            const answers = {};
+            
+            // Create question cards
+            questions.forEach((question, index) => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                questionCard.id = `question-${index + 1}`;
+                questionCard.style.display = 'none';
+                
+                questionCard.innerHTML = `
+                    <h3>Question ${index + 1}</h3>
+                    <p>${question}</p>
+                    <div class="options">
+                        <button type="button" class="option-btn" data-value="0">Never</button>
+                        <button type="button" class="option-btn" data-value="1">Sometimes</button>
+                        <button type="button" class="option-btn" data-value="2">Often</button>
+                        <button type="button" class="option-btn" data-value="3">Always</button>
+                    </div>
+                `;
+                
+                questionsContainer.appendChild(questionCard);
+            });
+            
+            const questionCards = document.querySelectorAll('.question-card');
+            
+            // Show first question and navigation
+            showQuestion(0);
+            navigationButtons.style.display = 'flex';
+            
+            // Handle option selection
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const questionCard = this.closest('.question-card');
+                    questionCard.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    answers[`q${currentQuestion + 1}`] = this.dataset.value;
+                });
+            });
+            
+            // Handle navigation
+            prevBtn.addEventListener('click', () => {
+                if (currentQuestion > 0) {
+                    showQuestion(currentQuestion - 1);
+                }
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                if (currentQuestion < questionCards.length - 1) {
+                    if (!answers[`q${currentQuestion + 1}`]) {
+                        alert('Please select an answer before proceeding.');
+                        return;
+                    }
+                    showQuestion(currentQuestion + 1);
+                } else {
+                    submitSurvey();
+                }
+            });
+            
+            function showQuestion(index) {
+                questionCards.forEach((q, i) => {
+                    q.style.display = i === index ? 'block' : 'none';
+                });
+                
+                currentQuestion = index;
+                const progress = ((index + 1) / questionCards.length) * 100;
+                progressBar.style.width = `${progress}%`;
+                
+                prevBtn.style.display = index === 0 ? 'none' : 'block';
+                nextBtn.textContent = index === questionCards.length - 1 ? 'Submit' : 'Next';
+            }
+            
+            async function submitSurvey() {
+                if (!answers[`q${currentQuestion + 1}`]) {
+                    alert('Please select an answer before submitting.');
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/submit_survey', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(answers)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.error) {
+                        alert(result.error);
+                    } else {
+                        showResults(result);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error submitting survey. Please try again.');
+                }
+            }
+
+            function showResults(result) {
+                const resultIcon = document.getElementById('result-icon');
+                const resultValue = document.getElementById('result-value');
+                const confidenceValue = document.getElementById('confidence-value');
+                const interpretation = document.getElementById('interpretation');
+                
+                resultValue.textContent = result.result;
+                confidenceValue.textContent = (result.confidence * 100).toFixed(1);
+                
+                if (result.result === 'Positive') {
+                    resultIcon.innerHTML = '<span style="color: #FF6B6B;">⚠️</span>';
+                    interpretation.innerHTML = `
+                        <h3>What This Means</h3>
+                        <p>The screening suggests that your child may show some signs of Autism Spectrum Disorder. This is not a diagnosis, but it indicates that further evaluation by a healthcare professional may be beneficial.</p>
+                        <h3>Next Steps</h3>
+                        <ul style="list-style: none; margin-left: 1rem;">
+                            <li>✓ Schedule an appointment with your pediatrician</li>
+                            <li>✓ Consider a comprehensive evaluation by a specialist</li>
+                            <li>✓ Document your observations and concerns</li>
+                            <li>✓ Research early intervention services in your area</li>
+                        </ul>
+                    `;
+                } else {
+                    resultIcon.innerHTML = '<span style="color: #4CAF50;">✓</span>';
+                    interpretation.innerHTML = `
+                        <h3>What This Means</h3>
+                        <p>The screening suggests that your child is developing typically. However, if you have any concerns about your child's development, it's always a good idea to discuss them with your pediatrician.</p>
+                        <h3>Next Steps</h3>
+                        <ul style="list-style: none; margin-left: 1rem;">
+                            <li>✓ Continue to monitor your child's development</li>
+                            <li>✓ Keep regular appointments with your pediatrician</li>
+                            <li>✓ Stay informed about developmental milestones</li>
+                            <li>✓ Trust your instincts - if you have concerns, discuss them with a professional</li>
+                        </ul>
+                    `;
+                }
+                
+                showPage('result');
+            }
+        });
+    </script>
+</body>
+</html> 

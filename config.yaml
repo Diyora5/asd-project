@@ -1,0 +1,118 @@
+num_samples: 30000
+asd_prevalence: 0.2
+random_seed: 42
+feature_groups:
+- name: Social_Interaction
+  features:
+  - A1_Score
+  - A2_Score
+  - A3_Score
+  - A4_Score
+  - A5_Score
+  - A6_Score
+  - A7_Score
+  - A8_Score
+  - A9_Score
+  - A10_Score
+  asd_probability_range:
+  - 0.6
+  - 0.85
+  non_asd_probability_range:
+  - 0.1
+  - 0.3
+  key_features:
+    A5_Score: 0.15
+    A8_Score: 0.2
+  missingness_probability: 0.02
+- name: Speech_Cognitive
+  features:
+  - A11_Score
+  - A12_Score
+  - A13_Score
+  - A14_Score
+  - A15_Score
+  - A16_Score
+  - A17_Score
+  - A18_Score
+  - A19_Score
+  - A20_Score
+  asd_probability_range:
+  - 0.7
+  - 0.9
+  non_asd_probability_range:
+  - 0.15
+  - 0.35
+  key_features:
+    A18_Score: 0.25
+  missingness_probability: 0.015
+- name: Repetitive_Behaviors
+  features:
+  - A21_Score
+  - A22_Score
+  - A23_Score
+  - A24_Score
+  - A25_Score
+  - A26_Score
+  - A27_Score
+  - A28_Score
+  - A29_Score
+  - A30_Score
+  asd_probability_range:
+  - 0.65
+  - 0.95
+  non_asd_probability_range:
+  - 0.05
+  - 0.25
+  key_features:
+    A21_Score: 0.3
+    A25_Score: 0.2
+  missingness_probability: 0.01
+- name: Sensory_Motor
+  features:
+  - A30_Score  # Added A30_Score to the features list
+  - A31_Score
+  - A32_Score
+  - A33_Score
+  - A34_Score
+  - A35_Score
+  - A36_Score
+  - A37_Score
+  - A38_Score
+  - A39_Score
+  asd_probability_range:
+  - 0.55
+  - 0.85
+  non_asd_probability_range:
+  - 0.1
+  - 0.4
+  key_features:
+    A30_Score: 0.2
+    A35_Score: 0.15
+  missingness_probability: 0.03
+demographics:
+  age:
+    min: 10
+    max: 36
+    mean: 24
+    std: 6
+  gender:
+    m: 0.8
+    f: 0.2
+  country:
+    USA: 0.28
+    Canada: 0.0152
+    UK: 0.0175
+    Ireland: 0.05
+    Japan: 0.0303
+    Russia: 0.01
+  reporter:
+    Parent: 0.7
+    Health Care Professional: 0.25
+    Relative: 0.05
+output_dir: ./generated_data
+output_formats:
+- csv
+- parquet
+validation_metrics:
+  max_class_ratio_diff: 0.1
+  max_missingness: 0.05

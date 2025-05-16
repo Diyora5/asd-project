@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Survey Part {{ part }}</title>
+</head>
+<body>
+    <h1>Survey Part {{ part }} of {{ total_parts }}</h1>
+    <ul>
+        {% for question in questions %}
+            <li>{{ question }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

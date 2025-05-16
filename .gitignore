@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+env/
+venv/
+ENV/
+*.env
+
+# VS Code settings
+.vscode/
+
+# Data and model files
+*.arff
+*.csv
+*.xlsx
+*.h5
+*.hdf5
+*.pkl
+*.joblib
+*.sav
+*.npz
+
+# Logs and outputs
+*.log
+*.out
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+*.pid
+
+# Ignore static analysis/mypy cache
+.mypy_cache/
+.pytest_cache/
+
+# Ignore build artifacts
+build/
+dist/
+*.egg-info/

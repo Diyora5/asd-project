@@ -1,0 +1,13 @@
+{
+  "generator_version": "1.0.0",
+  "timestamp": "20250326_141140",
+  "config": {
+    "num_samples": 30000,
+    "asd_prevalence": 0.2,
+    "random_seed": 45
+  },
+  "statistics": {
+    "actual_samples": 30000,
+    "actual_asd_ratio": 0.12003333333333334
+  }
+}
